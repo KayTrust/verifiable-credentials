@@ -104,3 +104,23 @@ export class NotAccreditedError extends Error {
         this.name = NotAccreditedError.name;
     }
 }
+
+export declare class IssuerOrHolderRequiredError extends Error {
+    constructor(message?: string);
+}
+
+export class CredentialRequired extends Error {
+    constructor(message?: string) {
+        super(message);
+        Object.setPrototypeOf(this, new.target.prototype);
+        this.name = CredentialRequired.name;
+    }
+}
+
+export class InvalidCredentials extends Error {
+    constructor(message?: string) {
+        super(message);
+        Object.setPrototypeOf(this, new.target.prototype);
+        this.name = InvalidCredentials.name;
+    }
+}

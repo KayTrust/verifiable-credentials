@@ -1,5 +1,6 @@
 
 import { ABI_VR } from './constants';
+import DIDStrategy from './did-strategy';
 import { EthCore } from './eth-core';
 import { Utils } from './utils';
 
@@ -23,5 +24,13 @@ export class VerificationRegistry {
     getAccreditMethod(data: any, validDays = 30): {[key: string]: any} {
         const hash = Utils.calculateHash(data);
         return this.contractInstance.methods.verify(hash, validDays);
+    }
+
+    async verify(data: any, attester: string): Promise<{valid: boolean, iat: number, exp: number}> {
+        const attesterObj = (new DIDStrategy(attester)).getAttesterObj();
+        const hash = Utils.calculateHash(data);
+        const dates = await this.contractInstance.methods.verifications(hash, attesterObj.getAddress()).call();
+        const isAccredited = parseInt(dates.iat) === 0 ? false : (parseInt(dates.exp) === 0 ? true : (dates.exp * 1000) >= Date.now());
+        return { valid: isAccredited, iat: dates.iat, exp: dates.exp };
     }
 }

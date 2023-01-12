@@ -6,6 +6,10 @@ import { ProofTypeAttestationIntermediateStatus } from './proof-type-intermediat
 import { Utils } from './utils';
 import { VerificationRegistry } from './verification-registry';
 import ProofStrategy from './proof-strategy';
+import DIDStrategy from './did-strategy';
+import { Verifier } from './verifier';
+import { VerifiableObject } from './verifiable-object';
+import { Credential } from './credential';
 
 export {
     DIDDocumentEV,
@@ -15,5 +19,9 @@ export {
     ProofTypeAttestationIntermediateStatus,
     Utils,
     VerificationRegistry,
-    ProofStrategy
+    DIDStrategy,
+    ProofStrategy,
+    Verifier,
+    VerifiableObject,
+    Credential
 }

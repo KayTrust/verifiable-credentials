@@ -2,7 +2,7 @@ import { EthCore } from './eth-core';
 import { DIDDocumentEV } from './did-document-ev';
 import { IdentityManager } from './identity-manager';
 import { VerificationRegistry } from './verification-registry';
-import { NotAccreditedError } from './erros';
+import { IssuerOrHolderRequiredError, NotAccreditedError, UnsupportedProofTypeError } from './erros';
 import { ProofType } from './proof-type';
 import { Utils } from './utils';
 
@@ -58,8 +58,23 @@ export class ProofTypeAttestationIntermediateStatus implements ProofType {
         return verifiableObjectCopy;
     }
 
-    verifyProof(): Promise<any> {
-        throw new Error('Method not implemented.');
+    /**
+     * @description Verify that the proof of a verifiable object is valid
+     * @param verifiableObject Credential or presentation to verfiy its proof
+     */
+     async verifyProof(verifiableObject: { [key: string]: any }): Promise<boolean> {
+        if (verifiableObject?.proof?.type !== this.proofType) throw new UnsupportedProofTypeError('unsupported proof type');
+        if (!verifiableObject?.issuer && !verifiableObject?.holder) throw new IssuerOrHolderRequiredError('the issuer or holder is required');
+        const issuer = verifiableObject?.issuer || verifiableObject?.holder;
+        let intermediateStatus = {
+            'hash': Utils.calculateHash(verifiableObject),
+            'status': Status.revoked
+        };
+        let acreditation = await this.verificationRegistry.verify(intermediateStatus, issuer);
+        if (acreditation.valid) return false;
+        intermediateStatus.status = Status.valid;
+        acreditation = await this.verificationRegistry.verify(intermediateStatus, issuer);
+        return acreditation.valid;
     }
 }
 

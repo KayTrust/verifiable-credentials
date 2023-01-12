@@ -1,8 +1,9 @@
 
 import { DIDDocumentEV } from './did-document-ev';
-import { NotAccreditedError } from './erros';
+import { IssuerOrHolderRequiredError, NotAccreditedError, UnsupportedProofTypeError } from './erros';
 import { EthCore } from './eth-core';
 import { IdentityManager } from './identity-manager';
+import ProofStrategy from './proof-strategy';
 import { ProofType } from './proof-type';
 import { VerificationRegistry } from './verification-registry';
 
@@ -54,7 +55,12 @@ export class ProofTypeSmartContract implements ProofType {
         return serializedVerifiableObj;
     }
     
-    verifyProof(verifiableObject: { [key: string]: any; }): Promise<boolean> {
-        throw new Error('Method not implemented.');
+    async verifyProof(verifiableObject: { [key: string]: any; }): Promise<boolean> {
+        const proof = (new ProofStrategy(verifiableObject?.proof)).getProofType();
+        if (proof?.type !== this.proofType) throw new UnsupportedProofTypeError('unsupported proof type');
+        if (!verifiableObject?.issuer && !verifiableObject?.holder) throw new IssuerOrHolderRequiredError('the issuer or holder is required');
+        const issuer = verifiableObject?.issuer || verifiableObject?.holder;
+        const acreditation = await this.verificationRegistry.verify(verifiableObject, issuer);
+        return acreditation.valid;
     }
 }

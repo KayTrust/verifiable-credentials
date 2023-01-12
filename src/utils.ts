@@ -1,4 +1,5 @@
 import { InvalidExp, InvalidIat, InvalidMnid, InvalidPrivateKey, InvalidPublicKey, UnsupportedAlgorithmJwt } from "./erros";
+import moment from 'moment';
 const EthLib = require('eth-lib');
 const Web3Utils = require('web3-utils');
 const mnid = require('mnid');
@@ -310,4 +311,53 @@ export class Utils {
     static getABIEvent(abi: any, eventName: string[] = []) {
         return abi.filter((item: any) => item.type === 'event' && eventName.includes(item.name));
     }
+    
+    /**
+     * @description Validate that the current date is less than a given date
+     * @param date Date to validate
+     */
+    static isNowBeforeDate(date: string): boolean {
+        return moment().isBefore(date);
+    }
+
+    /**
+     * @description Validate that the current date is in the range of two given dates
+     * @param firstDate Start date
+     * @param secondDate End date
+     */
+    static isNowBetweenDates(firstDate: string, secondDate: string): boolean {
+        return moment().isBetween(firstDate, secondDate);
+    }
+
+    /**
+     * @description Validates if the current date is greater than or equal to the given date
+     * @param date Date to validate
+     */
+     static isNowSameOrAfterDate(date: string): boolean {
+        return moment().isSameOrAfter(date);
+    }
+
+    /**
+     * @description Validate a list of rules about an object
+     * @param rule Rules to validate about the object
+     * @param obj Object to validate
+     */
+    static validateKeys(rule: any, obj: {[key: string]: any}): boolean {
+        const reducers: any = {
+            $and: (acc: any, val: any) => acc && val,
+            $or: (acc: any, val: any) => acc || val,
+        };
+        const [ruleType] = Object.keys(rule);
+        if (ruleType !== '$not' && (!Array.isArray(rule[ruleType]) || !rule[ruleType].length)) throw new Error('invalid rule');
+        return ruleType === '$not'
+          ? !Utils.validateKeys(rule['$not'], obj)
+          : rule[ruleType]
+            .map(
+                (r: any) =>
+                    typeof r === 'string'
+                    ? obj[r] !== undefined && obj[r] !== null
+                    : Utils.validateKeys(r, obj),
+                )
+            .reduce(reducers[ruleType], ruleType === '$and');
+    };
 }

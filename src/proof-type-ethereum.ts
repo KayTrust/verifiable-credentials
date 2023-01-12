@@ -35,7 +35,11 @@ export class ProofTypeEthereum implements ProofType {
         return this.proofTypeSmartContract.generateProof(verifiableObject, validDays);
     }
 
-    verifyProof(): Promise<any> {
-        throw new Error('Method not implemented.');
+    /**
+     * @description Verify that the proof of a verifiable object is valid
+     * @param verifiableObject Credential or presentation to verfiy its proof
+     */
+     verifyProof(verifiableObject: { [key: string]: any }): Promise<boolean> {
+        return this.proofTypeSmartContract.verifyProof(verifiableObject);
     }
 }
