@@ -8,4 +8,4 @@ src/*js
 src/*.map
 src/*.d.ts
 lib
-__tests__
+__tests__/index.local.js

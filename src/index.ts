@@ -10,6 +10,7 @@ import DIDStrategy from './did-strategy';
 import { Verifier } from './verifier';
 import { VerifiableObject } from './verifiable-object';
 import { Credential } from './credential';
+import { EthCore } from './eth-core';
 
 export {
     DIDDocumentEV,
@@ -23,5 +24,6 @@ export {
     ProofStrategy,
     Verifier,
     VerifiableObject,
-    Credential
+    Credential,
+    EthCore
 }
