@@ -1,6 +1,6 @@
 {
   "name": "@kaytrust/verifiable-credentials",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ts": "tsc -w",
     "doc": "typedoc --readme none --out doc src --module commonjs --target ES5 --tsconfig src/tsconfig.json --name 'Kaytrust Ethereum'",
