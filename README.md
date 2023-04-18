@@ -23,10 +23,16 @@ const credential = {
 Import EthCore class and instance
 
 ```typescript
-const node = "[URL_BLOCKCHAIN_NODE]";
+const host = "[URL_BLOCKCHAIN_NODE]";
 const privateKey = "[YOUR_PRIVATE_KEY]";
 const headers = [{}];
-const ethCore = new EthCore(node, privateKey, headers, {chainId: "[CHAIN_ID]", gasPrice: "[GAS_PRICE]"});
+const props = {
+    host, 
+    privateKey, 
+    headers, 
+    options = {chainId: "[CHAIN_ID]", gasPrice: "[GAS_PRICE]"}
+};
+const ethCore = new EthCore(props);
 ```
 ### Step 3:
 Import ProofTypeEthereum class and instance

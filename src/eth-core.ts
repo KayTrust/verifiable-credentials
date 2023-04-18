@@ -5,6 +5,24 @@ import { CantEstimatedGas, ContractAddressRequired, InsufficientBalance } from '
 const Web3 = require('web3');
 const constants = require('./constants');
 
+type Options = {
+    chainId: number
+    gasPrice: number
+    timeout: number
+    gasLimitMultiplier: number
+}
+
+type Header = {
+    name: string
+    value: string
+}
+export interface IEthCore {
+    host: string
+    privateKey?: string
+    headers?: Array<Header>
+    options?: Options
+}
+
 export class EthCore {
 
     public readonly chainId: number | string | undefined;
@@ -21,7 +39,8 @@ export class EthCore {
      * @param headers Optional headers that are sent to the Blockchain node
      * @param timeout Timeout for the connection
      */
-    constructor(host: string, privateKey?: string, headers: [{ name?: string, value?: string }] = [{}], options: Record<string, any> = {}) {
+    constructor(props: IEthCore) {
+        const { host, privateKey = null, headers = [{}], options = {} as Options } = props;
         if (!options.timeout) options.timeout = constants.DEFAULT_TIMEOUT;
         this.gasLimitMultiplier = options.gasLimitMultiplier || 2;
         this.gasPrice = options.gasPrice || 0;

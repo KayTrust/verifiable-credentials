@@ -19,15 +19,18 @@ const CONTRACTS = {
 };
 
 let proofTypeEthereum = null;
-let verificationRegistry = null;
-let identityManager = null;
-let proxyX = null;
 let ethCore = null;
 
 describe('Credentials management', () => {
 
     beforeAll(() => {
-        ethCore = new EthCore(node, privateKey, headers, {chainId: 80001, gasPrice: '95000000000'});
+        const ethCoreProps = {
+            host: node,
+            privateKey: privateKey,
+            headers: headers,
+            options: {chainId: 80001, gasPrice: '95000000000'}
+        };
+        ethCore = new EthCore(ethCoreProps);
         verificationRegistry = new VerificationRegistry(ethCore, CONTRACTS.mumbai.verificationRegistry);
         identityManager = new IdentityManager(ethCore, CONTRACTS.mumbai.identityManager);
         proofTypeEthereum = new ProofTypeEthereum(ethCore, { identityManager: CONTRACTS.mumbai.identityManager, verificationRegistry: CONTRACTS.mumbai.verificationRegistry, validDays: 0 });
