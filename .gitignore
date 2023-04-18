@@ -9,3 +9,5 @@ src/*.map
 src/*.d.ts
 lib
 __tests__/index.local.js
+.npmrc
+.npmrc_local
