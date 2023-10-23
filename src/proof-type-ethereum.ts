@@ -42,4 +42,13 @@ export class ProofTypeEthereum implements ProofType {
      verifyProof(verifiableObject: { [key: string]: any }): Promise<boolean> {
         return this.proofTypeSmartContract.verifyProof(verifiableObject);
     }
+
+    /**
+     * @description Revoke the proof of a verifiable object
+     * @param verifiableObject Credential or presentation to revoke its proof
+     */
+    revokeProof(verifiableObject: { [key: string]: any }): Promise<boolean> {
+        return this.proofTypeSmartContract.revokeProof(verifiableObject);
+    }
+
 }

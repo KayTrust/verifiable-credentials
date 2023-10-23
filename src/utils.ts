@@ -1,8 +1,8 @@
 import { InvalidExp, InvalidIat, InvalidMnid, InvalidPrivateKey, InvalidPublicKey, UnsupportedAlgorithmJwt } from "./erros";
+import { MNID as mnid } from '@nullbeam/mnid';
 import moment from 'moment';
 const EthLib = require('eth-lib');
 const Web3Utils = require('web3-utils');
-const mnid = require('mnid');
 const EC = require('elliptic').ec;
 const ec = new EC('secp256k1');
 const CryptoJS = require('crypto-js');
@@ -10,7 +10,6 @@ const sigFormatter = require('ecdsa-sig-formatter');
 const elliptic = require('elliptic');
 const secp256k1 = new elliptic.ec('secp256k1');
 const keccak256 = require('js-sha3').keccak256;
-
 export class Utils {
 
     private static validateIatTime(iat: number, marginError: number): boolean {

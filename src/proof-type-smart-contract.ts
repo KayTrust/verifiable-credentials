@@ -63,4 +63,18 @@ export class ProofTypeSmartContract implements ProofType {
         const acreditation = await this.verificationRegistry.verify(verifiableObject, issuer);
         return acreditation.valid;
     }
+
+    /**
+     * @description Revoke the proof of a verifiable object
+     * @param verifiableObject Credential or presentation to revoke its proof
+     */
+    async revokeProof(verifiableObject: { [key: string]: any }): Promise<boolean> {
+        if (verifiableObject?.proof?.type !== this.proofType) throw new UnsupportedProofTypeError('unsupported proof type');
+        if (!verifiableObject?.issuer && !verifiableObject?.holder) throw new IssuerOrHolderRequiredError('the issuer or holder is required');
+        const issuerDidEv = new DIDDocumentEV(verifiableObject?.issuer || verifiableObject?.holder);
+        const transactionData = this.verificationRegistry.getRevokeMethod(verifiableObject).encodeABI();
+        const addressVerificationRegistry = verifiableObject?.proof?.contractAddress || this.verificationRegistry.contractAddress;
+        const isRevoked = await this.identityManager.forwardTo(issuerDidEv.getAddress(), addressVerificationRegistry, transactionData, 0);
+        return isRevoked.status;
+    }
 }
