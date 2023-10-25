@@ -47,4 +47,9 @@ describe('Credentials management', () => {
         const credential = { credentialSubject: { name: 'Jerson Miranda', '@id': issuer }, issuanceDate, issuer };
 		return expect(proofTypeEthereum.generateProof(credential)).resolves.toBeDefined();
 	});
+
+    it('should revoke a credential', () => {
+        const credentialObj = new Credential("{\"credentialSubject\":{\"name\":\"Jerson Miranda\",\"@id\":\"did:ev:bmM8YE5vpmntRLWrMV4n5YMYBUSE5xzwYK6nU\"},\"issuanceDate\":\"2023-01-11T18:19:19.026Z\",\"issuer\":\"did:ev:bmM8YE5vpmntRLWrMV4n5YMYBUSE5xzwYK6nU\",\"proof\":{\"contractAddress\":\"0xEC42B9716cDb5d2471186F7B75C4570fdfB9F469\",\"networkId\":80001,\"type\":\"EthereumAttestationRegistry2019\"}}");
+		return expect(proofTypeEthereum.revokeProof(credentialObj)).resolves.toBeTruthy();
+	});
 });
