@@ -1,0 +1,32 @@
+{
+  "name": "verifiable-credentials",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:KayTrust/verifiable-credentials.git",
+  "author": "Geiner Grandez Valle <geiner120300@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KayTrust/verifiable-credentials/issues"
+  },
+  "homepage": "https://github.com/KayTrust/verifiable-credentials#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "postinstall": "rm -rf lib && yarn run build",
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.13",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
